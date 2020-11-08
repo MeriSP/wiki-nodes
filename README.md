@@ -69,6 +69,17 @@ ________
 <br><br>
 ________
 #### preprocessing/neo4j_tools/
+This folder contains a module, named [comm.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/neo4j_tools/comm.py), for interfacing with the Neo4j database (+ a unit test). The module contains a class named 'Neo4jComm' and has the following interface (private funcs not listed):
+* `__init__(self, uri:str, usr:str, pwd:str)`, which accepts the uri to the db & credentials.
+* `clear(self, label:str=None)` clears everything in the database with the provided label -- if the label is associated with nodes, then their relationships will be detached as well. If a label is not provided, then the entire db will be cleared.
+* `push_any_node(self, label:str, props:dict) -> None` will create a node in the db with the provided label and properties. So calling `x.push_any_node(label='Hobby', props={'name':'Spelunking'})` will create and send the Cypher code "`MERGE (_:Hobby {name:"Spelunking"})`".
+* `pull_any_node(self, label:str, props:dict) -> Gen` is the counterpart of the previous point -- it will use the label and props to find a _best_ match, meaning that more information gives more accurate result. If the info is not precise, then several objects can be returned (you can get all nodes with a certain label if you use an empty dict for the props argument). The return is a generator which contains a list of dictionaries that mirror matched Neo4j nodes.
+* `pull_any_node_props(self, label:str, props:dict, prop:str) -> list` works exactly like the previous point but returns properties indstead of nodes. For instance, if you have a lot of wikipedia articles (labeled 'Wiki' in this example) in the database and you want to pull all titles (in property named 'title'), then you can call this method with `x.pull_any_node_props(label='Wiki', props={}, prop='title')`
+* `push_any_rel(self, v_label:str, w_label:str, e_label:str, v_props:dict, w_props:dict, e_props:dict)` creates a relationship (v)-[e]->(w), where verice 'v' has label 'v_label' and props 'v_props' -- likewise for vertice 'w'. The new relationship will be labeled with 'e_label' and have 'e_props' as properties. The arguments related to 'v' and 'w' work on the same principle as the point above, where accuracy is the responsebility of the user of this class.
+* `pull_any_rel(self, v_label:str, w_label:str, e_label:str, v_props:dict, w_props:dict, e_props:dict) -> list` is the counterpart of the point above. The return is a list of dictionaries representing Neo4j nodes such that each odd indeces are 'from-node' and even indeces are 'to-nodes'. For example, if the return is `[a,b,a,c]`, then (a)->(b) and (a)->(b) is in the database.
+
+
+Note: Currently, the wikipedia data generated with [this module (wikiapi.py)](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/wikiapi.py), covered in [this section](#preprocessingdata_gen), is pushed to the Neo4j db in [this file(main.py)(https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/main.py)], covered in [this section](#preprocessingmainpy). It is done by passing wiki data objects to `Neo4jComm.push_any_node(...)`, which means that those properties are mirrored.
 
 <br><br>
 ________
