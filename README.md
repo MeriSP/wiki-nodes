@@ -79,7 +79,7 @@ This folder contains a module, named [comm.py](https://github.com/crunchypi/wiki
 * `pull_any_rel(self, v_label:str, w_label:str, e_label:str, v_props:dict, w_props:dict, e_props:dict) -> list` is the counterpart of the point above. The return is a list of dictionaries representing Neo4j nodes such that each odd indeces are 'from-node' and even indeces are 'to-nodes'. For example, if the return is `[a,b,a,c]`, then (a)->(b) and (a)->(b) is in the database.
 
 
-Note: Currently, the wikipedia data generated with [this module (wikiapi.py)](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/wikiapi.py), covered in [this section](#preprocessingdata_gen), is pushed to the Neo4j db in [this file(main.py)(https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/main.py)], covered in [this section](#preprocessingmainpy). It is done by passing wiki data objects to `Neo4jComm.push_any_node(...)`, which means that those properties are mirrored.
+Note: Currently, the wikipedia data generated with [this module (wikiapi.py)](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/wikiapi.py), covered in [this section](#preprocessingdata_gen), is pushed to the Neo4j db in [this file(main.py)](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/main.py)], covered in [this section](#preprocessingmainpy). It is done by passing wiki data objects to `Neo4jComm.push_any_node(...)`, which means that those properties are mirrored.
 
 <br><br>
 ________
