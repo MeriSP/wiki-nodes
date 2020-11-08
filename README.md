@@ -84,3 +84,21 @@ Note: Currently, the wikipedia data generated with [this module (wikiapi.py)](ht
 <br><br>
 ________
 #### preprocessing/main.py
+This file binds all the other Python modules in this project through a CLI. It is fairly long but has a very simple structure:
+- imports
+- CLI help string (used as documentation, kind of, and 'help' printout of the CLI)
+- Arg->Action bindings (contained in `cli_actions() -> dict`. It binds all arguments to task functions. More on that further down).
+- Task functions (one for each CLI argument, more on that further down).
+- Point of entry for this file, named `start()` (checks arguments, maps them to functions and keeps some state).
+
+
+All valid arguments are stored primarily in the function mentioned above, named `cli_actions() -> dict`, which returns a dict with the format {a:[b,c]}, where 'a' is a CLI argument identifier string, 'b' is a bool that specifies if 'a' expects a succeeding value, while 'c' is a function pointer which is associated with the current argument. All functions pointed to by 'c' should have the name of 'a' to avoid confusion, these are the 'task functions' listed in the previous paragraph.
+<br><br>
+At the bottom of the file is the point of entry, named `start()`; it will iterate through the CLI arguments and map them with the dictionary described in the previous paragraph. All functions associated with CLI argument identifiers will get three values: argument id, value succeeding the argument id, and current state , where 'current state' is the return of the previous arguments. This is significant because it means that the order of CLI arguments is sensitive.
+<br>
+
+
+
+
+
+
