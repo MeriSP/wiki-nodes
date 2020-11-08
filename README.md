@@ -30,6 +30,13 @@ ________
 <br><br>
 ________
 #### preprocessing/data/
+The data folder is created to keep all data which is coupled to the code -- 'that's why it is in root/src/preprocessing/...' and not at the top level of the hierarchy. Below are some bullet-points describing each file:
+* *'wiki4schools_topics_raw.txt'* : Used to paste topics from wikipedia for schools (website). Contents of this file will be parsed by [this file](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py), which is covered [in this section](#preprocessingdata_gen). The structure of this data file is as follows:
+  * '#' drops the current line, used for commenting.
+  * '[TOPIC=abc]' denotes where a topic of name 'abc' starts. Everything from this marker, until the next, will be interpreted as article names, separated with tabs (tabs because that's the format of the wikipedia for schools site, so you can just copy-paste).
+
+
+
 
 <br><br>
 ________
