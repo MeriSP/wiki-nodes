@@ -59,8 +59,8 @@ The second file listed above, [wikiapi.py](https://github.com/crunchypi/wiki-nod
   * `ArticleData.url:str` (real url to this article), 
   * `ArticleData.content_raw:str`(wiki text with some format), 
   * `ArticleData.links:list`(links present in the wiki article),
-  * `ArticleData.html`.
-  There are also some additional properties like 
+  * `ArticleData.html:html` (raw html of the wiki page).
+  <br>There are also some additional properties like <br>
   * `ArticleData.content_cleaned:str`(reserved for when a cleaner is implemented and can clean the raw content field),
   * `ArticleData.topics_prelinked:list` (reserved for predefined topics parsed with [articles.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py), as mentioned earlier in this section of the document.)
 
