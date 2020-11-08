@@ -40,29 +40,25 @@ The data folder is created to keep all data which is coupled to the code -- 'tha
 ________
 #### preprocessing/data_gen/
 This folder contains two primary modules:
-* [articles.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py): Responsible for parsing topics & article names (from 'wiki4schools_topics_raw.txt', covered in [this](#preprocessingdata) section).
-* [wikiapi.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/wikiapi.py): Responsible for using the article names (previous point) to fetch data with the wiki api wrapper called 'wikipedia'.
 
-<br><br>
-
-The first file listed above, [articles.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py), contains:
-* `load_articles(path:str, delimiter:str='\t') -> Generator[ArticleList]`, it streams data from any file with the format described in [this](#preprocessingdata) section. Each streamed object will by of the type described in the next point.
-* `class ArticleList`, has two properties: `ArticleList.topic:str` and `ArticleList.article_names:list`, where the list represents a single line in the parsed file.
+* [articles.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py): Responsible for parsing topics & article names (from 'wiki4schools_topics_raw.txt', covered in [this](#preprocessingdata) section). Contains:
+  * `load_articles(path:str, delimiter:str='\t') -> Generator[ArticleList]`, it streams data from any file with the format described in [this](#preprocessingdata) section. Each streamed object will by of the type described in the next point.
+  * `class ArticleList`, has two properties: `ArticleList.topic:str` and `ArticleList.article_names:list`, where the list represents a single line in the parsed file.
 
 <br>
 
-The second file listed above, [wikiapi.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/wikiapi.py), contains:
-* `pull_articles(names:list) -> Generator[ArticleData]`, which simply uses its argument list to pull data from wikipedia (using the dependency found in [this](https://github.com/goldsmith/Wikipedia) repo). It is a generator which returns `ArticleData` instances (is listed further down).
-* `__pull(name:str, ttl=5) -> WikipediaPage` is the func which actually pulls data (used by the point above) -- it does so safely by accounting for ambigious wiki article names. If a API query fails, it tries to find the best match through recursion until either something is found, or `ttl` reaches zero. Note, the expected return type is defined by the API wrapper: `import wikipedia.wikipedia.WikipediaPage`
-* `class ArticleData` mirrors the wikipedia data pulled with the API which is deemed useful (listed below). It is **important** to note that the first 5 properties are populated in this module, while the last are filled elsewhere ([main.py](#preprocessingmainpy)). **Also**, all these properties will be mirrored in the neo4j dataase when creating wiki nodes ([described in this section](#preprocessingneo4j_tools)).
-  * `ArticleData.name:str`(name of wiki article), 
-  * `ArticleData.url:str` (real url to this article), 
-  * `ArticleData.content_raw:str`(wiki text with some format), 
-  * `ArticleData.links:list`(links present in the wiki article),
-  * `ArticleData.html:html` (raw html of the wiki page).
-  <br>There are also some additional properties like <br>
-  * `ArticleData.content_cleaned:str`(reserved for when a cleaner is implemented and can clean the raw content field),
-  * `ArticleData.topics_prelinked:list` (reserved for predefined topics parsed with [articles.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py), as mentioned earlier in this section of the document.)
+* [wikiapi.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/wikiapi.py): Responsible for using the article names (previous point) to fetch data with the wiki api wrapper called 'wikipedia'. Contains:
+  * `pull_articles(names:list) -> Generator[ArticleData]`, which simply uses its argument list to pull data from wikipedia (using the dependency found in [this](https://github.com/goldsmith/Wikipedia) repo). It is a generator which returns `ArticleData` instances (is listed further down).
+  * `__pull(name:str, ttl=5) -> WikipediaPage` is the func which actually pulls data (used by the point above) -- it does so safely by accounting for ambigious wiki article names. If a API query fails, it tries to find the best match through recursion until either something is found, or `ttl` reaches zero. Note, the expected return type is defined by the API wrapper: `import wikipedia.wikipedia.WikipediaPage`
+  * `class ArticleData` mirrors the wikipedia data pulled with the API which is deemed useful (listed below). It is **important** to note that the first 5 properties are populated in this module, while the last are filled elsewhere ([main.py](#preprocessingmainpy)). **Also**, all these properties will be mirrored in the neo4j dataase when creating wiki nodes ([described in this section](#preprocessingneo4j_tools)).
+    * `ArticleData.name:str`(name of wiki article), 
+    * `ArticleData.url:str` (real url to this article), 
+    * `ArticleData.content_raw:str`(wiki text with some format), 
+    * `ArticleData.links:list`(links present in the wiki article),
+    * `ArticleData.html:html` (raw html of the wiki page).
+    <br>There are also some additional properties like <br>
+    * `ArticleData.content_cleaned:str`(reserved for when a cleaner is implemented and can clean the raw content field),
+    * `ArticleData.topics_prelinked:list` (reserved for predefined topics parsed with [articles.py](https://github.com/crunchypi/wiki-nodes/blob/develop/src/preprocessing/data_gen/articles.py), as mentioned earlier in this section of the document.)
 
 
 
